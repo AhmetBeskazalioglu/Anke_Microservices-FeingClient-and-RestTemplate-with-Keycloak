@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Products</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            padding-top: 50px;
+        }
+        .product-list {
+            max-width: 800px;
+            margin: auto;
+        }
+        .product-item {
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            margin-bottom: 15px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .product-item h5 {
+            margin-bottom: 0;
+        }
+        .product-item p {
+            margin-bottom: 5px;
+        }
+        .product-price {
+            color: #28a745;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1 class="text-center">Products</h1>
+    <div class="product-list">
+        <div th:each="product : ${products}" class="product-item">
+            <h5 th:text="${product.name}"></h5>
+            <p th:text="${product.description}"></p>
+            <p><strong>Category:</strong> <span th:text="${product.category}"></span></p>
+            <p class="product-price" th:text="${product.price} + ' TL'"></p>
+        </div>
+    </div>
+</div>
+</body>
+</html>

@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cart</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+<body>
+<header>
+    <div th:replace="/fragments/header :: header"/>
+</header>
+<nav>
+    <div th:replace="/fragments/navbar :: navbar"/>
+</nav>
+<main class="container mt-4">
+    <h1 class="text-center">Your Cart</h1>
+    <div class="product-list">
+        <div th:each="product : ${cart.products}" class="product-item">
+            <img th:src="@{${product.image}}" width="150" height="150" alt="Product image">
+            <h5 th:text="${product.name}"></h5>
+            <p th:text="${product.description}"></p>
+            <p><strong>Category:</strong> <span th:text="${product.category}"></span></p>
+            <p class="product-price" th:text="${product.price} + ' TL'"></p>
+            <form th:action="@{/api/feign-client/cart/{cartId}/product/{productId}/remove(cartId=${cart.id}, productId=${product.id})}" method="post">
+                <button type="submit" class="btn btn-danger">Ürünü Çıkar</button>
+            </form>
+        </div>
+    </div>
+    <div class="text-center mt-4">
+        <form th:action="@{/api/feign-client/cart/{cartId}/products/remove(cartId=${cart.id})}" method="post">
+            <button type="submit" class="btn btn-danger">Tüm Ürünleri Çıkar</button>
+        </form>
+    </div>
+</main>
+<footer>
+    <div th:replace="/fragments/footer :: footer"/>
+</footer>
+<script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>

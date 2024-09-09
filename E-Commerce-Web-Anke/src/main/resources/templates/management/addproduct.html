@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+<head></head>
+<body>
+<h3>Product List</h3>
+<table class="table table-bordered table-striped table-hover">
+    <thead>
+    <tr>
+        <th>Name</th>
+        <th>Price</th>
+        <th>Description</th>
+        <th>Category</th>
+        <th>Image URL</th>
+    </tr>
+    </thead>
+
+    <tbody>
+    <tr th:each="product : ${products}">
+        <td th:text="${product.name}"></td>
+        <td th:text="${product.price}"></td>
+        <td th:text="${product.description}"></td>
+        <td th:text="${product.category}"></td>
+        <td th:text="${product.image}"></td>
+        <td>
+
+<!--
+               <a sec:authorize="hasRole('MANAGER')" th:href="@{/employees/showFormForUpdate/{employeeId}(employeeId=${tempEmployee.id})}"  class="btn-update">Update</a>
+-->
+               <a sec:authorize="hasRole('ADMIN')" th:href="@{/api/feign-client/deleteProduct/{id}(id=${product.id})}" class="btn-delete" onclick="return confirm('Are you sure you want to delete this employee?');">Delete</a>
+
+        </td>
+    </tr>
+    </tbody>
+</table>
+
+<hr>
+<div class="container">
+
+    <h3>Add Product</h3>
+    <hr>
+
+    <form th:action="@{/api/feign-client/saveProduct}" th:object="${product}" method="post">
+        <input type="hidden" th:field="*{id}">
+        <div class="form-group">
+            <label for="name">Name</label>
+            <input type="text" class="form-control" id="name" th:field="*{name}"
+                   placeholder="Enter name" required>
+        </div>
+        <div class="form-group">
+            <label for="price">Price</label>
+            <input type="text" class="form-control" id="price" th:field="*{price}" placeholder="Enter price"
+                   required>
+        </div>
+        <div class="form-group">
+            <label for="description">Description</label>
+            <input type="text" class="form-control" id="description" th:field="*{description}" placeholder="Enter description"
+                   required>
+        </div>
+        <div class="form-group">
+            <label for="category">Category</label>
+            <input type="text" class="form-control" id="category" th:field="*{category}" placeholder="Enter category"
+                   required>
+        </div>
+        <div class="form-group">
+            <label for="image">Image URL</label>
+            <input type="text" class="form-control" id="image" th:field="*{image}" placeholder="Enter image URL"
+                   required>
+        </div>
+        <button type="submit" class="btn-save">Add Product</button>
+    </form>
+    <hr>
+    <form th:action="@{/logout}" method="post">
+        <input type="submit" class="logout-button" value="Çıkış Yap">
+    </form>
+
+    <!-- Home Butonu -->
+    <form th:action="@{/api/feign-client/home}" method="get">
+        <input type="submit" class="btn-back" value="Back to Home Page">
+    </form>
+
+    <!-- Back to Management Dashboard -->
+    <form th:action="@{/management}" method="get">
+        <input type="submit" class="btn-back" value="Back to Management Dashboard">
+    </form>
+</div>
+</body>
+</html>

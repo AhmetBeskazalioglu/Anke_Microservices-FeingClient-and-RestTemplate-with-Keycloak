@@ -1,0 +1,24 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <!-- Meta tags and other head content -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Products</title>
+    <link rel="stylesheet" th:href="@{/css/styles.css}">
+</head>
+<body>
+<header>
+    <div th:replace="/fragments/header :: header"/>
+</header>
+<nav>
+    <div th:replace="/fragments/navbar :: navbar"/>
+</nav>
+<main class="container mt-4">
+    <div th:replace="/fragments/products :: products"/>
+</main>
+<footer>
+    <div th:replace="/fragments/footer :: footer"/>
+</footer>
+</body>
+</html>

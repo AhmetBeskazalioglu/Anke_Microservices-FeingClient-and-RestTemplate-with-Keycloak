@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+<head></head>
+<body>
+<!-- Bu kısım sadece yetkililer tarafından görünür -->
+<h3>ADMIN DASHBOARD</h3>
+<hr>
+<div sec:authorize="hasRole('EMPLOYEE')">
+    <form th:action="@{/api/feign-client/showFormForAdd}" method="post">
+        <input type="submit" class="btn-add" value="Product Management">
+    </form>
+</div>
+<!--<div sec:authorize="hasRole('MANAGER')">
+    <form th:action="@{/api/feign-client/showForUpdate}" method="post">
+        <input type="submit" class="btn-add" value="Add Product">
+    </form>
+</div>-->
+<hr>
+<form th:action="@{/logout}" method="post">
+    <input type="submit" class="logout-button" value="Çıkış Yap">
+</form>
+
+<!-- Home Butonu -->
+<form th:action="@{/api/feign-client/home}" method="get">
+    <input type="submit" class="btn-back" value="Back to Home Page">
+</form>
+</body>
+</html>

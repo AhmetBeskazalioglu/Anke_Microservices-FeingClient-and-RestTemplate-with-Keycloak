@@ -1,0 +1,39 @@
+
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" xmlns:sec="http://www.w3.org/1999/xhtml">
+<head></head>
+<body>
+<div th:fragment="products">
+    <h1 class="text-center">Products</h1>
+    <div class="product-list">
+        <div th:each="product : ${products}" class="product-item">
+            <img th:src="@{${product.image}}" width="150" height="150" alt="Product image">
+            <h5 th:text="${product.name}"></h5>
+            <p th:text="${product.description}"></p>
+            <p><strong>Category:</strong> <span th:text="${product.category}"></span></p>
+            <p class="product-price" th:text="${product.price} + ' TL'"></p>
+
+            <div class="btn-group">
+                <form th:action="@{/api/feign-client/cart/add}" method="post">
+                    <input type="hidden" th:name="productId" th:value="${product.id}"/>
+                    <button type="submit" class="btn btn-primary">
+                        Sepete Ekle
+                    </button>
+                </form>
+                <a th:href="@{/api/feign-client/cart}" class="btn btn-secondary">Sepete Git</a>
+            </div>
+
+            <!-- Uyarı mesajı sadece eklenen ürünün altında görünür -->
+            <div th:if="${addedProductId == product.id}" class="alert alert-success mt-2" role="alert">
+                Ürün sepete eklendi!
+            </div>
+        </div>
+    </div>
+
+    <!-- Yönetim için buton -->
+    <div sec:authorize="hasRole('EMPLOYEE')">
+        <a href="/management" class="btn-add">Management</a>
+    </div>
+</div>
+</body>
+</html>
