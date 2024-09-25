@@ -2,6 +2,7 @@ package com.opendart.user_service.service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.net.*;
 
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
@@ -12,12 +13,17 @@ import org.apache.http.message.BasicNameValuePair;
 import org.apache.http.util.EntityUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
-
+import org.springframework.web.reactive.function.BodyInserters;
+import org.springframework.web.reactive.function.client.WebClient;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.opendart.user_service.entity.ShoppingCart;
@@ -30,9 +36,10 @@ import com.opendart.user_service.payload.response.MessageResponse;
 import com.opendart.user_service.repository.UserRepository;
 
 import jakarta.persistence.EntityNotFoundException;
+import reactor.core.publisher.Mono;
 
 @Service
-public class UserService {
+public class UserService2 {
     @Value("${jwt.issuer_uri}")
     String jwtIssuerUri;
 
@@ -54,6 +61,8 @@ public class UserService {
     @Autowired
     RestTemplate restTemplate;
 
+
+    @SuppressWarnings("unused")
     public ResponseEntity<?> authenticateUser(LoginRequest loginRequest) {
         User user;
         try {
@@ -68,23 +77,47 @@ public class UserService {
         }
 
         HttpClient httpClient = HttpClients.createDefault();
-        HttpPost httpPost = new HttpPost(jwtIssuerUri);
 
-        List<BasicNameValuePair> params = new ArrayList<>();
-        params.add(new BasicNameValuePair("grant_type", jwtGrantType));
-        params.add(new BasicNameValuePair("client_id", jwtClientId));
-        params.add(new BasicNameValuePair("client_secret", jwtClientSecret));
-        params.add(new BasicNameValuePair("scope", jwtScope));
 
         String accessToken = "";
         try {
-            httpPost.setEntity(new UrlEncodedFormEntity(params));
-            HttpResponse response = httpClient.execute(httpPost);
+            String sorgu = jwtIssuerUri.replaceAll(" ", "%20");
+
+
+            List<BasicNameValuePair> params = new ArrayList<>();
+            params.add(new BasicNameValuePair("grant_type", jwtGrantType));
+            params.add(new BasicNameValuePair("client_id", jwtClientId));
+            params.add(new BasicNameValuePair("client_secret", jwtClientSecret));
+            params.add(new BasicNameValuePair("scope", jwtScope));
+            //Uri sorguUri ="http://localhost:8080/realms/java-microservice-realm/protocol/openid-connect/token?grant_type=client_credentials&client_id=spring-cloud-client&client_secret=AJufwN1eof8P5Gga5Y9atCFqdMuZEuKd&scope=openid offline_access";
+            // HttpPost httpPost = new HttpPost(sorgu);
+            //HttpPost httpPost = new HttpPost("http://localhost:8080/realms/java-microservice-realm/protocol/openid-connect/token?grant_type=client_credentials&client_id=spring-cloud-client&client_secret=AJufwN1eof8P5Gga5Y9atCFqdMuZEuKd&scope=openid offline_access");
+            // httpPost.setEntity(new UrlEncodedFormEntity(params));
+            //HttpResponse response = httpClient.execute(httpPost);
 
             // Handle the response
-            String responseBody = EntityUtils.toString(response.getEntity());
+            // String responseBody = EntityUtils.toString(response.getEntity());
+            WebClient client = WebClient.create();
 
-            accessToken = extractAccessToken(responseBody);
+            MultiValueMap<String, String> bodyValues = new LinkedMultiValueMap<>();
+
+            bodyValues.add("grant_type", jwtGrantType);
+            bodyValues.add("client_id", jwtClientId);
+            bodyValues.add("client_secret", jwtClientSecret);
+            bodyValues.add("scope", jwtScope);
+
+            String gelenCevap = client.post()
+                    .uri(new URI(jwtIssuerUri))
+                    //.header("Authorization", "SECRET_TOKEN")
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .accept(MediaType.APPLICATION_JSON)
+                    .body(BodyInserters.fromMultipartData(bodyValues))
+                    .retrieve()
+                    .bodyToMono(String.class)
+                    .block();
+
+            accessToken = extractAccessToken(gelenCevap);
+            // accessToken = extractAccessToken(responseBody);
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -184,9 +217,5 @@ public class UserService {
             e.printStackTrace();
             return ResponseEntity.internalServerError().body(new MessageResponse("Internal Server Error"));
         }
-    }
-
-    public ResponseEntity<?> getAllUsers() {
-        return ResponseEntity.ok(userRepository.findAll());
     }
 }

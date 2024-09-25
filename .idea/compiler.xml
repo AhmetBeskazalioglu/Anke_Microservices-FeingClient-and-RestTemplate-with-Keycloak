@@ -12,6 +12,7 @@
         <module name="discovery-server" />
         <module name="E-Commerce-Web-Anke" />
         <module name="product-service" />
+        <module name="user-service" />
         <module name="shopping-cart-service-feignclient" />
         <module name="shopping-cart-service" />
       </profile>
@@ -27,6 +28,7 @@
       <module name="product-service" options="-parameters" />
       <module name="shopping-cart-service" options="-parameters" />
       <module name="shopping-cart-service-feignclient" options="-parameters" />
+      <module name="user-service" options="-parameters" />
     </option>
   </component>
 </project>

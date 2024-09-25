@@ -11,6 +11,7 @@
         <option value="$PROJECT_DIR$/shopping-cart-service-feignclient/pom.xml" />
         <option value="$PROJECT_DIR$/Ecommerce-Web/pom.xml" />
         <option value="$PROJECT_DIR$/E-Commerce-Web-Anke/pom.xml" />
+        <option value="$PROJECT_DIR$/user-service/pom.xml" />
       </list>
     </option>
   </component>

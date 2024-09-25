@@ -17,15 +17,15 @@ public class OpenAPIConfig {
 	@Bean
 	public OpenAPI myOpenAPI() {
 		Contact contact = new Contact();
-		contact.setEmail("ibrahim.gokyar1@gmail.com");
-		contact.setName("İbrahim Gökyar");
-		contact.setUrl("https://github.com/ibrahimgokyar/");
+		contact.setEmail("ahmetbeskaalioglu@gmail.com");
+		contact.setName("Ahmet Beskazalioglu");
+		contact.setUrl("https://github.com/AhmetBeskazalioglu");
 
 		License mitLicense = new License().name("MIT License").url("https://choosealicense.com/licenses/mit/");
 
-		Info info = new Info().title("User API").version("1.0").contact(contact)
-				.description("Documentation User API v1.0")
-				// .termsOfService("https://github.com/Ctere1/")
+		Info info = new Info().title("Product API").version("1.0").contact(contact)
+				.description("Documentation Product API v1.0")
+				.termsOfService("https://github.com/AhmetBeskazalioglu")
 				.license(mitLicense);
 
 		final String securitySchemeName = "bearerAuth";
