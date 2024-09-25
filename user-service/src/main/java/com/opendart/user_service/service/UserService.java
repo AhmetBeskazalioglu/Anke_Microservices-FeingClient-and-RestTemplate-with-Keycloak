@@ -83,6 +83,7 @@ public class UserService {
 
             // Handle the response
             String responseBody = EntityUtils.toString(response.getEntity());
+            System.out.println("Response Body: " + responseBody);  // Log the response
 
             accessToken = extractAccessToken(responseBody);
 
